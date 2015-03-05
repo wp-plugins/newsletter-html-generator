@@ -5,7 +5,7 @@ Plugin Name: Newsletter HTML Generator
 Plugin URI: http://n.infobusiness2.ru/newsletter-html-generator/
 Description: Extracts title, teaser (or excerpt), author name, featured image, permalink, shortlink, date from current post and generates full HTML-code of ready to send newsletter based on templates you provide. You just copy and paste the final HTML-code in your favorite newsletter sending service like Mailchimp, GetResponse, Campaign Monitor, etc.
 Author: Konstantin Benko
-Version: 1.1.2
+Version: 1.1.3
 Author URI: https://facebook.com/ekosteg
 */
 
@@ -32,11 +32,13 @@ function kos_newshtml_meta_callback( $post ) {
             $content = $post->post_content;
             preg_match( '/(.*)<!--more-->/s', $content, $matches );
             $teaser = strip_tags( count( $matches ) ? $matches[0] : $post->post_excerpt );
+						$first10words = str_replace('"', '', implode(' ', array_slice(explode(' ', $teaser), 0, 10)));
             $image = wp_get_attachment_url( get_post_thumbnail_id() );
             $author = get_the_author();
             foreach ( $query->posts as $template ) {
                 $template->post_content = str_replace( '{{{title}}}', $title, $template->post_content );
                 $template->post_content = str_replace( '{{{teaser}}}', $teaser, $template->post_content );
+                $template->post_content = str_replace( '{{{first10words}}}', $first10words, $template->post_content );
                 $template->post_content = str_replace( '{{{author}}}', $author, $template->post_content );
                 $template->post_content = str_replace( '{{{shortlink}}}', $shortlink, $template->post_content );
                 $template->post_content = str_replace( '{{{permalink}}}', $permalink, $template->post_content );
@@ -51,9 +53,14 @@ function kos_newshtml_meta_callback( $post ) {
 				$html .= '<script>
 					function finalResultCode() {
 						var final = jQuery(\'#ipreview\').contents()[0].documentElement.outerHTML;
-						if (final.indexOf(\'<html><head></head><body>\') != -1) final = final.substr(25,final.length-40);
+						if (final.indexOf(\'<html><head></head><body>\') != -1) {
+							final = final.substr(25,final.length-40);
+						} else {
+							final = \'<!DOCTYPE html>\' + final;
+						}
 						final=final.replace(/(<[^>]+)( contenteditable="[^"]*")/g,"$1");
 						final=final.replace(/(<[^>]+)( contenteditable)/g,"$1");
+						final=final.replace(\'image=""\',\'image\');
 						return final;
 					}
 				</script>';
@@ -73,11 +80,12 @@ function kos_newshtml_help_meta_callback( $post ) { ?>
         <li>Insert any of these snippets to the appropriate places of your template:
             <br><kbd>{{{title}}}</kbd>
             <br><kbd>{{{teaser}}}</kbd> – will use excerpt or the text above ReadMore tag
-            <br><kbd>{{{author}}}</kbd>
+						<br><kbd>{{{author}}}</kbd>
             <br><kbd>{{{image}}}</kbd> – will use featured image
             <br><kbd>{{{permalink}}}</kbd>
             <br><kbd>{{{shortlink}}}</kbd>
             <br><kbd>{{{date}}}</kbd>
+						<br><kbd>{{{first10words}}}</kbd> – first 10 words of teaser – useful for inserting to invisible first element, so google will use it as a snippet
             <br>The snippets will be replaced by actual data from your posts.</li>
         <li>Save the template.</li>
     </ol>

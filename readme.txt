@@ -4,7 +4,7 @@ Donate link: https://www.facebook.com/ekosteg
 Tags: newsletter, html, snippets, generator, mailchimp, getresponse, madmimi, campaignmonitor, responsive
 Requires at least: 4.0
 Tested up to: 4.1.1
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -50,12 +50,15 @@ Title, teaser (or if you don't have "read more" tag in post – the excerpt will
 
 == Changelog ==
 
+= 1.1.3 =
+* Added {{{first10words}}} snippet. Useful for inserting to invisible first element, so google will use it as a snippet
+
 = 1.1.2 =
 * Fixing left contenteditable tags
 
 = 1.1 =
 * Fixing incorrect teaser generation
-* Now you can add "contenteditable" atribute to some elements of your HTML-templates. After that you can edit your newsletter right in the preview.
+* Now you can add "contenteditable" atribute to some elements of your HTML-templates. After that you can edit your newsletter right in the preview and get final HTML code.
 
 = 1.0 =
 * Hurray
