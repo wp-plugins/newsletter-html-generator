@@ -4,7 +4,7 @@ Donate link: https://www.facebook.com/ekosteg
 Tags: newsletter, html, snippets, generator, mailchimp, getresponse, madmimi, campaignmonitor, responsive
 Requires at least: 4.0
 Tested up to: 4.1.1
-Stable tag: 1.0
+Stable tag: 1.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Generates HTML-code of ready to send newsletter using title, teaser, image, etc 
 
 == Description ==
 
-Newsletter HTML Generator plugin extracts title, teaser (or excerpt), author name, featured image, permalink, shortlink, date from current post and generates full HTML-code of ready to send newsletter based on templates you provide. You just copy and paste the final HTML-code in your favorite newsletter sending service like Mailchimp, GetResponse, Campaign Monitor, etc.
+Newsletter HTML Generator plugin extracts title, teaser (or excerpt), author name, featured image, permalink, shortlink, date from current post and generates full HTML-code of ready to send newsletter based on the templates you provide. You just copy and paste the final HTML-code in your favorite newsletter sending service like Mailchimp, GetResponse, Campaign Monitor, etc.
 
 ### How does it work?
 The plugin makes custom post type "Email Templates".
@@ -41,7 +41,7 @@ To exclude this manual labor the plugin automatically generates ready-to-send HT
 
 = What parts of my posts can be used in newsletters? =
 
-Title, teaser (or if you don't have "read more" tag in post – the excerpt will be used), author name, featured image url, permalink, shortlink.
+Title, teaser (or if you don't have "read more" tag in post – the excerpt will be used), author name, featured image url, permalink, shortlink, publishing date.
 
 == Screenshots ==
 
@@ -49,6 +49,13 @@ Title, teaser (or if you don't have "read more" tag in post – the excerpt will
 2. Example of generating newsletter HTML from blog post.
 
 == Changelog ==
+
+= 1.1.2 =
+* Fixing left contenteditable tags
+
+= 1.1 =
+* Fixing incorrect teaser generation
+* Now you can add "contenteditable" atribute to some elements of your HTML-templates. After that you can edit your newsletter right in the preview.
 
 = 1.0 =
 * Hurray
