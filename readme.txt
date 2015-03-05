@@ -4,7 +4,7 @@ Donate link: https://www.facebook.com/ekosteg
 Tags: newsletter, html, snippets, generator, mailchimp, getresponse, madmimi, campaignmonitor, responsive
 Requires at least: 4.0
 Tested up to: 4.1.1
-Stable tag: 1.1
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,6 +49,9 @@ Title, teaser (or if you don't have "read more" tag in post – the excerpt will
 2. Example of generating newsletter HTML from blog post.
 
 == Changelog ==
+
+= 1.1.1 =
+* Fixing left contenteditable tags
 
 = 1.1 =
 * Fixing incorrect teaser generation

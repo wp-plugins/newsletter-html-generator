@@ -46,8 +46,17 @@ function kos_newshtml_meta_callback( $post ) {
             }
         }
         $html .= '</select> <small>*You can <a target="_blank" href="/wp-admin/edit.php?post_type=email-templates">create and edit templates here</a>.</small></p>';
-				$html .= '<span id="preview" style="display:none;"><p>Here is the preview of your newsletter:<br><iframe id="ipreview" style="width:100%; height:500px;"></iframe></p><small>Advanced tip: if you add <a href="http://www.w3schools.com/tags/att_global_contenteditable.asp" target="_blank">contenteditable atribute</a> to some elements of your template – you will have the possibility to edit your newsletter right in the preview.</small><p><button class="button" onclick="var resultcode = jQuery(\'#ipreview\').contents()[0].documentElement.outerHTML; if (resultcode.indexOf(\'<html><head></head><body>\') != -1) resultcode = resultcode.substr(25,resultcode.length-40); jQuery(\'#code\').val(resultcode);jQuery(\'#results\').show();jQuery(\'#code\').select();return false;">Looks fine? Get ready-to-send HTML code</button></p></span>';
+				$html .= '<span id="preview" style="display:none;"><p>Here is the preview of your newsletter:<br><iframe id="ipreview" style="width:100%; height:500px;"></iframe></p><small>Advanced tip: if you add <a href="http://www.w3schools.com/tags/att_global_contenteditable.asp" target="_blank">contenteditable atribute</a> to some elements of your template – you will have the possibility to edit your newsletter right in the preview.</small><p><button class="button" onclick="var resultcode = finalResultCode(); jQuery(\'#code\').val(resultcode);jQuery(\'#results\').show();jQuery(\'#code\').select();return false;">Looks fine? Get ready-to-send HTML code</button></p></span>';
 				$html .= '<p id="results" style="display:none;">Your "Ready to Send" newsletter HTML code:<br><textarea id="code" style="width:100%; height:150px;"></textarea><br><small>Press <kbd>Ctrl</kbd>+<kbd>C</kbd> to copy the code. Then use it for any newsletter service provider like Mailchimp, GetResponse, etc.</small></p>';
+				$html .= '<script>
+					function finalResultCode() {
+						var final = jQuery(\'#ipreview\').contents()[0].documentElement.outerHTML;
+						if (final.indexOf(\'<html><head></head><body>\') != -1) final = final.substr(25,final.length-40);
+						final=final.replace(/(<[^>]+)( contenteditable="[^"]*")/g,"$1");
+						final=final.replace(/(<[^>]+)( contenteditable)/g,"$1");
+						return final;
+					}
+				</script>';
         echo $html;
     }
 }
