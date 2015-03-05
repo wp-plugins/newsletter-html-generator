@@ -4,7 +4,7 @@ Donate link: https://www.facebook.com/ekosteg
 Tags: newsletter, html, snippets, generator, mailchimp, getresponse, madmimi, campaignmonitor, responsive
 Requires at least: 4.0
 Tested up to: 4.1.1
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -50,7 +50,7 @@ Title, teaser (or if you don't have "read more" tag in post – the excerpt will
 
 == Changelog ==
 
-= 1.1.1 =
+= 1.1.2 =
 * Fixing left contenteditable tags
 
 = 1.1 =
