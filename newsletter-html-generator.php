@@ -5,7 +5,7 @@ Plugin Name: Newsletter HTML Generator
 Plugin URI: http://n.infobusiness2.ru/newsletter-html-generator/
 Description: Extracts title, teaser (or excerpt), author name, featured image, permalink, shortlink, date from current post and generates full HTML-code of ready to send newsletter based on templates you provide. You just copy and paste the final HTML-code in your favorite newsletter sending service like Mailchimp, GetResponse, Campaign Monitor, etc.
 Author: Konstantin Benko
-Version: 1.1.4
+Version: 1.1.5
 Author URI: https://facebook.com/ekosteg
 */
 
@@ -53,7 +53,7 @@ function kos_newshtml_meta_callback( $post ) {
 				$html .= '<script>
 					function finalResultCode() {
 						var final = jQuery(\'#ipreview\').contents()[0].documentElement.outerHTML;
-						if (code.indexOf(\'<!DOCTYPE\') != -1) {
+						if (final.indexOf(\'<html><head></head><body>\') != -1) {
 							final = final.substr(25,final.length-40);
 						} else {
 							final = \'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">\' + final;
