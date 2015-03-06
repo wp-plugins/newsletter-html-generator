@@ -4,7 +4,7 @@ Donate link: https://www.facebook.com/ekosteg
 Tags: newsletter, html, snippets, generator, mailchimp, getresponse, madmimi, campaignmonitor, responsive
 Requires at least: 4.0
 Tested up to: 4.1.1
-Stable tag: 1.1.3
+Stable tag: 1.1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,6 +49,9 @@ Title, teaser (or if you don't have "read more" tag in post – the excerpt will
 2. Example of generating newsletter HTML from blog post.
 
 == Changelog ==
+
+= 1.1.4 =
+* Fixed "<!DOCTYPE" tag. Now you can use full-html templates with doctype, head, body, etc. And you can use limited html without doctype, head – just body inner html templates (like used in GetResponse).
 
 = 1.1.3 =
 * Added {{{first10words}}} snippet. Useful for inserting to invisible first element, so google will use it as a snippet
