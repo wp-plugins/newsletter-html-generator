@@ -5,7 +5,7 @@ Plugin Name: Newsletter HTML Generator
 Plugin URI: http://n.infobusiness2.ru/newsletter-html-generator/
 Description: Extracts title, teaser (or excerpt), author name, featured image, permalink, shortlink, date from current post and generates full HTML-code of ready to send newsletter based on templates you provide. You just copy and paste the final HTML-code in your favorite newsletter sending service like Mailchimp, GetResponse, Campaign Monitor, etc.
 Author: Konstantin Benko
-Version: 1.0
+Version: 1.1.4
 Author URI: https://facebook.com/ekosteg
 */
 
@@ -23,20 +23,22 @@ function kos_newshtml_meta_callback( $post ) {
     else {
         $query = new WP_Query( array( 'post_type' => 'email-templates' ) );
         $html = '<p>Select newsletter template: ';
-        $html .= '<select id="templates-select" onchange="var code = decodeURIComponent(jQuery(\'#templates-select\').val()); document.getElementById(\'ipreview\').src = \'data:text/html;charset=utf-8,\' + jQuery(\'#templates-select\').val(); jQuery(\'#code\').val(code); jQuery(\'#results\').show(); document.getElementById(\'code\').select();">';
+        $html .= '<select id="templates-select" onchange="var code = decodeURIComponent(jQuery(\'#templates-select\').val()); document.getElementById(\'ipreview\').srcdoc = code; jQuery(\'#preview\').show(); jQuery(\'#code\').val(\'\')">';
         $html .= '<option></option>';
         if ( count( $query ) ) {
             $shortlink = wp_get_shortlink();
             $permalink = urldecode( get_permalink() );
             $title = $post->post_title;
             $content = $post->post_content;
-            preg_match( '/(.*)<!--more-->/', $content, $matches );
+            preg_match( '/(.*)<!--more-->/s', $content, $matches );
             $teaser = strip_tags( count( $matches ) ? $matches[0] : $post->post_excerpt );
+						$first10words = str_replace('"', '', implode(' ', array_slice(explode(' ', $teaser), 0, 10)));
             $image = wp_get_attachment_url( get_post_thumbnail_id() );
             $author = get_the_author();
             foreach ( $query->posts as $template ) {
                 $template->post_content = str_replace( '{{{title}}}', $title, $template->post_content );
                 $template->post_content = str_replace( '{{{teaser}}}', $teaser, $template->post_content );
+                $template->post_content = str_replace( '{{{first10words}}}', $first10words, $template->post_content );
                 $template->post_content = str_replace( '{{{author}}}', $author, $template->post_content );
                 $template->post_content = str_replace( '{{{shortlink}}}', $shortlink, $template->post_content );
                 $template->post_content = str_replace( '{{{permalink}}}', $permalink, $template->post_content );
@@ -45,9 +47,23 @@ function kos_newshtml_meta_callback( $post ) {
                 $html .= '<option value="'. strtr( rawurlencode( $template->post_content ), array( '%21'=>'!', '%2A'=>'*', '%27'=>"'", '%28'=>'(', '%29'=>')' ) ). '">'. $template->post_title. '</option>';
             }
         }
-        $html .= '</select><br><small>You can <a target="_blank" href="/wp-admin/edit.php?post_type=email-templates">create and edit templates here</a>.</small></p>';
-        $html .= '<span id="results" style="display:none;"><p>Your "Ready to Send" newsletter HTML code:<br><textarea id="code" style="width:100%; height:150px;"></textarea><br><small>Press <kbd>Ctrl</kbd>+<kbd>C</kbd> to copy the code. Then use it for any newsletter service provider like Mailchimp, GetResponse, etc.</small></p>';
-        $html .= '<p>Here is the preview of your newsletter:<br><iframe id="ipreview" style="width:100%; height:500px;"></iframe></p></span>';
+        $html .= '</select> <small>*You can <a target="_blank" href="/wp-admin/edit.php?post_type=email-templates">create and edit templates here</a>.</small></p>';
+				$html .= '<span id="preview" style="display:none;"><p>Here is the preview of your newsletter:<br><iframe id="ipreview" style="width:100%; height:500px;"></iframe></p><small>Advanced tip: if you add <a href="http://www.w3schools.com/tags/att_global_contenteditable.asp" target="_blank">contenteditable atribute</a> to some elements of your template – you will have the possibility to edit your newsletter right in the preview.</small><p><button class="button" onclick="var resultcode = finalResultCode(); jQuery(\'#code\').val(resultcode);jQuery(\'#results\').show();jQuery(\'#code\').select();return false;">Looks fine? Get ready-to-send HTML code</button></p></span>';
+				$html .= '<p id="results" style="display:none;">Your "Ready to Send" newsletter HTML code:<br><textarea id="code" style="width:100%; height:150px;"></textarea><br><small>Press <kbd>Ctrl</kbd>+<kbd>C</kbd> to copy the code. Then use it for any newsletter service provider like Mailchimp, GetResponse, etc.</small></p>';
+				$html .= '<script>
+					function finalResultCode() {
+						var final = jQuery(\'#ipreview\').contents()[0].documentElement.outerHTML;
+						if (code.indexOf(\'<!DOCTYPE\') != -1) {
+							final = final.substr(25,final.length-40);
+						} else {
+							final = \'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">\' + final;
+						}
+						final=final.replace(/(<[^>]+)( contenteditable="[^"]*")/g,"$1");
+						final=final.replace(/(<[^>]+)( contenteditable)/g,"$1");
+						final=final.replace(\'image=""\',\'image\');
+						return final;
+					}
+				</script>';
         echo $html;
     }
 }
@@ -61,14 +77,15 @@ function kos_newshtml_help() {
 function kos_newshtml_help_meta_callback( $post ) { ?>
     <ol>
         <li>Paste the template code from your newsletter service provider (like Mailchimp)</li>
-        <li>Insert to the appropriate places any of these snippets:
+        <li>Insert any of these snippets to the appropriate places of your template:
             <br><kbd>{{{title}}}</kbd>
             <br><kbd>{{{teaser}}}</kbd> – will use excerpt or the text above ReadMore tag
-            <br><kbd>{{{author}}}</kbd>
+						<br><kbd>{{{author}}}</kbd>
             <br><kbd>{{{image}}}</kbd> – will use featured image
             <br><kbd>{{{permalink}}}</kbd>
             <br><kbd>{{{shortlink}}}</kbd>
             <br><kbd>{{{date}}}</kbd>
+						<br><kbd>{{{first10words}}}</kbd> – first 10 words of teaser – useful for inserting to invisible first element, so google will use it as a snippet
             <br>The snippets will be replaced by actual data from your posts.</li>
         <li>Save the template.</li>
     </ol>
