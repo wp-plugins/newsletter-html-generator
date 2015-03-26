@@ -4,7 +4,7 @@ Donate link: https://www.facebook.com/ekosteg
 Tags: newsletter, html, snippets, generator, mailchimp, getresponse, madmimi, campaignmonitor, responsive
 Requires at least: 4.0
 Tested up to: 4.1.1
-Stable tag: 1.1.5
+Stable tag: 1.1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,6 +38,7 @@ Here is the example of context the plugin can help in.
 You have a wordpress blog and run newsletter based on posts using some email service provider like Mailchimp.
 Every time you create newsletter you have to manually copy and paste title, teaser, image, author name etc from your post to the newsletter service's editor.
 To exclude this manual labor the plugin automatically generates ready-to-send HTML-code from your posts. You can copy it, then go to newsletter service provider, create blank newsletter from scratch and just paste generated HTML-code.
+The plugin can also automatically add analytics tracking parameters to your newsletter's links.
 
 = What parts of my posts can be used in newsletters? =
 
@@ -49,6 +50,8 @@ Title, teaser (or if you don't have "read more" tag in post – the excerpt will
 2. Example of generating newsletter HTML from blog post.
 
 == Changelog ==
+= 1.1.6 =
+* New feature: The plugin can also automatically add analytics tracking parameters to your newsletter's links.
 
 = 1.1.5 =
 * Fixed bug in "<!DOCTYPE" tag.

@@ -5,7 +5,7 @@ Plugin Name: Newsletter HTML Generator
 Plugin URI: http://n.infobusiness2.ru/newsletter-html-generator/
 Description: Extracts title, teaser (or excerpt), author name, featured image, permalink, shortlink, date from current post and generates full HTML-code of ready to send newsletter based on templates you provide. You just copy and paste the final HTML-code in your favorite newsletter sending service like Mailchimp, GetResponse, Campaign Monitor, etc.
 Author: Konstantin Benko
-Version: 1.1.5
+Version: 1.1.6
 Author URI: https://facebook.com/ekosteg
 */
 
@@ -44,6 +44,10 @@ function kos_newshtml_meta_callback( $post ) {
                 $template->post_content = str_replace( '{{{permalink}}}', $permalink, $template->post_content );
                 $template->post_content = str_replace( '{{{image}}}', $image, $template->post_content );
                 $template->post_content = str_replace( '{{{date}}}', get_the_date('F j, Y'), $template->post_content );
+								if ($utm = get_post_custom_values ( 'utm', $template->ID )) {
+									$utm = $utm[0];
+									$template->post_content = str_replace( $permalink, $permalink. '?'. $utm, $template->post_content );
+								}
                 $html .= '<option value="'. strtr( rawurlencode( $template->post_content ), array( '%21'=>'!', '%2A'=>'*', '%27'=>"'", '%28'=>'(', '%29'=>')' ) ). '">'. $template->post_title. '</option>';
             }
         }
@@ -90,6 +94,7 @@ function kos_newshtml_help_meta_callback( $post ) { ?>
         <li>Save the template.</li>
     </ol>
     <p>Now you can use this template. Open (edit) any of your regular posts and generate ready-to-send HTML newsletter code.</p>
+<p>Advanced tip: Newsletter HTML generator can automatically add url analytics tracking parameters to the {{{permalink}}} snippet. Just add custom field <kbd>utm</kbd> to this template and enter desirable parameters as value. For example: <kbd>utm_source=email&utm_medium=mailchimp&utm_campaign=weekly_newsletter</kbd>. Then plugin will automatically add these parameters to the permalink in the final ready-to-send HTML code.</p>
 <?php }
 
 
@@ -112,7 +117,8 @@ function kos_email_templates_init() {
         'supports' => array(
             'title',
             'editor',
-            'revisions' )
+            'revisions',
+						'custom-fields' )
     );
     register_post_type( 'email-templates', $args );
 }
