@@ -4,7 +4,7 @@ Donate link: https://www.facebook.com/ekosteg
 Tags: newsletter, html, snippets, generator, mailchimp, getresponse, madmimi, campaignmonitor, responsive
 Requires at least: 4.0
 Tested up to: 4.1.1
-Stable tag: 1.0
+Stable tag: 1.1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Generates HTML-code of ready to send newsletter using title, teaser, image, etc 
 
 == Description ==
 
-Newsletter HTML Generator plugin extracts title, teaser (or excerpt), author name, featured image, permalink, shortlink, date from current post and generates full HTML-code of ready to send newsletter based on templates you provide. You just copy and paste the final HTML-code in your favorite newsletter sending service like Mailchimp, GetResponse, Campaign Monitor, etc.
+Newsletter HTML Generator plugin extracts title, teaser (or excerpt), author name, featured image, permalink, shortlink, date from current post and generates full HTML-code of ready to send newsletter based on the templates you provide. You just copy and paste the final HTML-code in your favorite newsletter sending service like Mailchimp, GetResponse, Campaign Monitor, etc.
 
 ### How does it work?
 The plugin makes custom post type "Email Templates".
@@ -38,10 +38,11 @@ Here is the example of context the plugin can help in.
 You have a wordpress blog and run newsletter based on posts using some email service provider like Mailchimp.
 Every time you create newsletter you have to manually copy and paste title, teaser, image, author name etc from your post to the newsletter service's editor.
 To exclude this manual labor the plugin automatically generates ready-to-send HTML-code from your posts. You can copy it, then go to newsletter service provider, create blank newsletter from scratch and just paste generated HTML-code.
+The plugin can also automatically add analytics tracking parameters to your newsletter's links.
 
 = What parts of my posts can be used in newsletters? =
 
-Title, teaser (or if you don't have "read more" tag in post – the excerpt will be used), author name, featured image url, permalink, shortlink.
+Title, teaser (or if you don't have "read more" tag in post – the excerpt will be used), author name, featured image url, permalink, shortlink, publishing date.
 
 == Screenshots ==
 
@@ -49,6 +50,24 @@ Title, teaser (or if you don't have "read more" tag in post – the excerpt will
 2. Example of generating newsletter HTML from blog post.
 
 == Changelog ==
+= 1.1.6 =
+* New feature: The plugin can also automatically add analytics tracking parameters to your newsletter's links.
+
+= 1.1.5 =
+* Fixed bug in "<!DOCTYPE" tag.
+
+= 1.1.4 =
+* Fixed "<!DOCTYPE" tag. Now you can use full-html templates with doctype, head, body, etc. And you can use limited html without doctype, head – just body inner html templates (like used in GetResponse).
+
+= 1.1.3 =
+* Added {{{first10words}}} snippet. Useful for inserting to invisible first element, so google will use it as a snippet
+
+= 1.1.2 =
+* Fixing left contenteditable tags
+
+= 1.1 =
+* Fixing incorrect teaser generation
+* Now you can add "contenteditable" atribute to some elements of your HTML-templates. After that you can edit your newsletter right in the preview and get final HTML code.
 
 = 1.0 =
 * Hurray
