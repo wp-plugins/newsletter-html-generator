@@ -5,7 +5,7 @@ Plugin Name: Newsletter HTML Generator
 Plugin URI: http://n.infobusiness2.ru/newsletter-html-generator/
 Description: Extracts title, teaser (or excerpt), author name, featured image, permalink, shortlink, date from current post and generates full HTML-code of ready to send newsletter based on templates you provide. You just copy and paste the final HTML-code in your favorite newsletter sending service like Mailchimp, GetResponse, Campaign Monitor, etc.
 Author: Konstantin Benko
-Version: 1.1.6
+Version: 1.1.7
 Author URI: https://facebook.com/ekosteg
 */
 
@@ -23,7 +23,7 @@ function kos_newshtml_meta_callback( $post ) {
     else {
         $query = new WP_Query( array( 'post_type' => 'email-templates' ) );
         $html = '<p>Select newsletter template: ';
-        $html .= '<select id="templates-select" onchange="var code = decodeURIComponent(jQuery(\'#templates-select\').val()); document.getElementById(\'ipreview\').srcdoc = code; jQuery(\'#preview\').show(); jQuery(\'#code\').val(\'\')">';
+        $html .= '<select id="templates-select" onchange="var code = decodeURIComponent(jQuery(\'#templates-select\').val()); document.getElementById(\'ipreview\').srcdoc = code;  jQuery(\'#plaintext\').val(decodeURIComponent(jQuery(this).find(\':selected\').attr(\'data-plaintext\'))); document.getElementById(\'ipreview\').srcdoc = code; jQuery(\'#preview\').show(); jQuery(\'#code\').val(\'\')">';
         $html .= '<option></option>';
         if ( count( $query ) ) {
             $shortlink = wp_get_shortlink();
@@ -48,12 +48,27 @@ function kos_newshtml_meta_callback( $post ) {
 									$utm = $utm[0];
 									$template->post_content = str_replace( $permalink, $permalink. '?'. $utm, $template->post_content );
 								}
-                $html .= '<option value="'. strtr( rawurlencode( $template->post_content ), array( '%21'=>'!', '%2A'=>'*', '%27'=>"'", '%28'=>'(', '%29'=>')' ) ). '">'. $template->post_title. '</option>';
+								$result['html'] = strtr( rawurlencode( $template->post_content ), array( '%21'=>'!', '%2A'=>'*', '%27'=>"'", '%28'=>'(', '%29'=>')' ) );
+							
+								//Plain text version:
+								$re = "/.*<body/"; $subst = "<body";
+								$plaintext = preg_replace($re, $subst, $template->post_content);
+								$re = "/<style[^<]+<\\/style>/"; $subst = "";
+								$plaintext = preg_replace($re, $subst, $plaintext);
+								$re = "/<br\\s*[\\/]*>/"; $subst = "\n";
+								$plaintext = preg_replace($re, $subst, $plaintext);
+								$re = "/<a href=\"([^\"]+)\"[^>]+>([^<]+)<\\/a>/";
+								$subst = "$2: $1";
+								$plaintext = strip_tags (preg_replace ($re, $subst, $plaintext));
+								$plaintext = trim (str_replace ('&nbsp;', ' ', $plaintext));
+								$result['plaintext'] = strtr( rawurlencode( $plaintext ), array( '%21'=>'!', '%2A'=>'*', '%27'=>"'", '%28'=>'(', '%29'=>')' ) );
+							
+                $html .= '<option value="'. $result['html']. '" data-plaintext="'. $result['plaintext']. '">'. $template->post_title. '</option>';
             }
         }
         $html .= '</select> <small>*You can <a target="_blank" href="/wp-admin/edit.php?post_type=email-templates">create and edit templates here</a>.</small></p>';
-				$html .= '<span id="preview" style="display:none;"><p>Here is the preview of your newsletter:<br><iframe id="ipreview" style="width:100%; height:500px;"></iframe></p><small>Advanced tip: if you add <a href="http://www.w3schools.com/tags/att_global_contenteditable.asp" target="_blank">contenteditable atribute</a> to some elements of your template – you will have the possibility to edit your newsletter right in the preview.</small><p><button class="button" onclick="var resultcode = finalResultCode(); jQuery(\'#code\').val(resultcode);jQuery(\'#results\').show();jQuery(\'#code\').select();return false;">Looks fine? Get ready-to-send HTML code</button></p></span>';
-				$html .= '<p id="results" style="display:none;">Your "Ready to Send" newsletter HTML code:<br><textarea id="code" style="width:100%; height:150px;"></textarea><br><small>Press <kbd>Ctrl</kbd>+<kbd>C</kbd> to copy the code. Then use it for any newsletter service provider like Mailchimp, GetResponse, etc.</small></p>';
+				$html .= '<span id="preview" style="display:none;"><p>Here is the preview of your newsletter:<br><iframe id="ipreview" style="width:100%; height:500px;"></iframe></p><small>Advanced tip: if you add <a href="http://www.w3schools.com/tags/att_global_contenteditable.asp" target="_blank">contenteditable atribute</a> to some elements of your template – you will have the possibility to edit your newsletter right in the preview.</small><p><button class="button" onclick="var resultcode = finalResultCode(); jQuery(\'#code\').val(resultcode); jQuery(\'#results\').show();jQuery(\'#code\').select();return false;">Looks fine? Get ready-to-send HTML code</button></p></span>';
+				$html .= '<p id="results" style="display:none;">Your "Ready to Send" newsletter HTML code:<br><textarea id="code" style="width:100%; height:150px;"></textarea><br><small>Press <kbd>Ctrl</kbd>+<kbd>C</kbd> to copy the code. Then use it for any newsletter service provider like Mailchimp, GetResponse, etc.</small><br><br>Plain-text version:<textarea id="plaintext" style="width:100%; height:150px;"></textarea></p>';
 				$html .= '<script>
 					function finalResultCode() {
 						var final = jQuery(\'#ipreview\').contents()[0].documentElement.outerHTML;

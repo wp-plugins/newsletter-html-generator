@@ -4,7 +4,7 @@ Donate link: https://www.facebook.com/ekosteg
 Tags: newsletter, html, snippets, generator, mailchimp, getresponse, madmimi, campaignmonitor, responsive
 Requires at least: 4.0
 Tested up to: 4.1.1
-Stable tag: 1.1.6
+Stable tag: 1.1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,7 +17,7 @@ Newsletter HTML Generator plugin extracts title, teaser (or excerpt), author nam
 ### How does it work?
 The plugin makes custom post type "Email Templates".
 1. First, you create as many templates as you need (for example "Mailchimp responsive", "Weekly newsletter", etc). You can get templates from newsletter service or design your own.
-1. After that you open any of your regular posts in edit-mode, and choose any Email template you created before. The plugin instantly generates ready-to-send HTML-code using the post's title, teaser, etc.
+1. After that you open any of your regular posts in edit-mode, and choose any Email template you created before. The plugin instantly generates ready-to-send HTML-code using the post's title, teaser, etc. You also get the plain-text version of your newsletter – just in case.
 
 The plugin doesn't send newsletter, doesn't create signup forms, doesn't segment your subscribers! It only generates ready to send HTML you can use with ANY Email service provider or Email marketing service.
 
@@ -50,6 +50,9 @@ Title, teaser (or if you don't have "read more" tag in post – the excerpt will
 2. Example of generating newsletter HTML from blog post.
 
 == Changelog ==
+= 1.1.7 =
+* New feature: Now the plugin generates HTML and plain text versions.
+
 = 1.1.6 =
 * New feature: The plugin can also automatically add analytics tracking parameters to your newsletter's links.
 
